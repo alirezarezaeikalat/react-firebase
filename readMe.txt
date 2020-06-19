@@ -56,3 +56,92 @@ const mapStateToProps = (state) => {
     };
 }
 export default connect(mapStateToProps)(Dashboard);
+
+4. We can get and update state in component itself, in life cycle hooks
+    and dispatch an action to update the store, but in this way we don't
+    have true separation of concern.
+
+5. so we don't want to use async task in the component itself and we 
+    can't use it in the reducer itself, we can do this with Thunk middleware
+    between dispatching an action and the reducer: 
+
+    a. first install redux-thunk: 
+        npm install redux-thunk
+
+    b. then in index.js we have to import thunk and applyMiddleware:
+
+            import { createStore, applyMiddleware } from 'redux';
+            import thunk from 'redux-thunk';
+
+    c. then use applyMiddleware and store enhancer(thunk) for the store:
+
+        const store = createStore(rootReducer, applyMiddleware(thunk));
+
+
+    d. normally we make separate .js file for action creators, and we return 
+        actions, and we dispatch this action in the component for example: 
+
+        export createProject = (project) => {
+            return {
+                type: 'ADD_PROJECT'
+                project: project
+            }
+        }
+
+        mapDispatchToProps = (dispatch, ownProps) => {
+            return {
+                addProject: (project) => {
+                    dispatch(createProject(project))
+                }
+            }
+        }
+    
+    now by using thunk, in action creators, we return functions instead of 
+    action, and in this function we can perform async tasks: 
+
+        export createProject = (project) => {
+            return (dispatch, getState) => {
+                // perform async task
+                dispatch({type: 'ADD_PROJECT', project: project})
+            }
+        };
+
+        mapDispatchToProps = (dispatch, ownProps) => {
+            return {
+                addProject: (project) => {
+                    dispatch(createProject(project))
+                }
+            }
+        }
+
+6. We can initialize our firebase project with in two way: 
+
+    first: 
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.15.2/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+
+    <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyC1D3GjrHk7SZfS1ep7PUdz1rmBdtykwGk",
+        authDomain: "appman-ff99c.firebaseapp.com",
+        databaseURL: "https://appman-ff99c.firebaseio.com",
+        projectId: "appman-ff99c",
+        storageBucket: "appman-ff99c.appspot.com",
+        messagingSenderId: "45077490891",
+        appId: "1:45077490891:web:5b879d8666e1d1dfe9bf4e"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    </script>
+
+    or instead of using tags at the top we can use firebase cli
+
+    import firebase from 'firebase/app'
+    import 'firebase/firestore'
+    import 'firebase/auth'
+
