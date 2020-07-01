@@ -145,3 +145,40 @@ export default connect(mapStateToProps)(Dashboard);
     import 'firebase/firestore'
     import 'firebase/auth'
 
+7. we can use firebase normally in our action creator to connect with firestore,
+   but there are two library that make it easier to work with firebase and
+   firestore in redux: 
+
+        npm install react-redux-firebase
+        npm install redux-firestore
+
+    b. then you have to import them in index.js and use them with thunk: 
+
+    import { getFirestore } from 'redux-firestore'
+    import { getFirebase } from 'react-redux-firebase'
+
+    c. use it with thunk: 
+
+        const store = 
+        createStore(rootReducer, applyMiddleware(thunk.withExtraArgument({
+            getFirebase, getFirestore
+        })));
+
+    d. then use it in action creators: 
+
+        export const createProject = (project) => {
+            // async code
+            return (dispatch, getState, {getFirebase, getFirestore}) => {
+                dispatch({type: 'ADD_PROJECT', project: project});
+            };
+        };
+
+[Attention]
+but as you can see getFirestore and getFirebase doesn't know about our project
+so we can use two another store enhancer, just like applyMiddleware to 
+overcome this situation: 
+
+    to solve this problem, check these two links: 
+
+    http://react-redux-firebase.com/docs/firestore.html
+    http://react-redux-firebase.com/docs/integrations/thunks.html
