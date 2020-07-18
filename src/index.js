@@ -9,7 +9,7 @@ import authReducer from './stores/reducers/authReducer';
 import projectReducer from './stores/reducers/projectReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { getFirestore, createFirestoreInstance, firestoreReducer } from 'redux-firestore';
+import { createFirestoreInstance, firestoreReducer } from 'redux-firestore';
 import { getFirebase, ReactReduxFirebaseProvider, firebaseReducer } from 'react-redux-firebase';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
 });
 const store = createStore(rootReducer,
   compose(
-    applyMiddleware(thunk.withExtraArgument({getFirebase, getFirestore})), 
+    applyMiddleware(thunk.withExtraArgument({getFirebase})), 
   )
 );
 // react-redux-firebase initialization

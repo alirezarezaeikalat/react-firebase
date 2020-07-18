@@ -182,3 +182,35 @@ overcome this situation:
 
     http://react-redux-firebase.com/docs/firestore.html
     http://react-redux-firebase.com/docs/integrations/thunks.html
+
+8. we don't have getFirestore in the version 3 of redux-thunk but we can use 
+
+    const firebase = getFirebase();
+    const firestore = firebase.getFirestore();
+
+9. When you add firestoreReducer to the rootReducer it 
+    is going to automatically retrieve data from the firestore:
+
+
+import { createFirestoreInstance, firestoreReducer } from 'redux-firestore';
+//initialize redux
+const rootReducer = combineReducers({
+  auth: authReducer,
+  project: projectReducer,
+  firebase: firebaseReducer,
+  firestore: firestoreReducer
+});
+
+10. we can bind certain component to the certain collection 
+    we can use useFirestoreConnect hook or using firestoreConnect higher
+    order component, if we use higher order component and we already
+    used another higher order component we have to use compose to 
+    use multiple higher order component for a single react component:
+
+    import { firestoreConnect } from 'react-redux-firebase';
+    import { compose } from 'redux';
+    
+     
+
+
+    

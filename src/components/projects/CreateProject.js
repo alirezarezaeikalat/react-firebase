@@ -13,6 +13,7 @@ class CreateProject extends Component {
     }
     handeSubmit = (e) => {
         e.preventDefault();
+        console.log(this.state)
         this.props.createProject(this.state)
     }
     render() {
